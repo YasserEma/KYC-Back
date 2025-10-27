@@ -1,6 +1,7 @@
 import { Entity, Column, Index, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { SubscriberEntity } from '../../subscribers/entities/subscriber.entity';
+import { SubscriberUserEntity } from '../../subscriber-users/entities/subscriber-user.entity';
 import { LogEntity } from '../../logs/entities/log.entity';
 import { EntityCustomFieldEntity } from '../../entity-custom-fields/entities/entity-custom-field.entity';
 import { EntityHistoryEntity } from '../../entity-history/entities/entity-history.entity';
@@ -38,6 +39,14 @@ export class EntityEntity extends BaseEntity {
 
   @Column({ type: 'uuid', nullable: true })
   updated_by?: string;
+
+  @ManyToOne(() => SubscriberUserEntity)
+  @JoinColumn({ name: 'created_by' })
+  creator: SubscriberUserEntity;
+
+  @ManyToOne(() => SubscriberUserEntity)
+  @JoinColumn({ name: 'updated_by' })
+  updater: SubscriberUserEntity;
 
   @Column({ type: 'text', nullable: true })
   risk_level?: string;

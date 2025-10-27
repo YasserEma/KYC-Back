@@ -6,22 +6,19 @@ import { OrganizationRelationshipType } from '../../../utils/constants/enums';
 @Entity('organization_entity_relationships')
 @Index(['from_entity_id', 'to_entity_id', 'relationship_type'], { unique: true })
 export class OrganizationEntityRelationship extends BaseEntity {
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: false })
   from_entity_id: string;
 
-  @Column({ type: 'uuid' })
+  @Column({ type: 'uuid', nullable: false })
   to_entity_id: string;
 
-  @Column({
-    type: 'enum',
-    enum: OrganizationRelationshipType,
-  })
-  relationship_type: OrganizationRelationshipType;
+  @Column({ type: 'text', nullable: false })
+  relationship_type: string;
 
   @Column({ type: 'text', nullable: true })
   description: string;
 
-  @Column({ type: 'decimal', precision: 5, scale: 2, nullable: true })
+  @Column({ type: 'decimal', nullable: true })
   ownership_percentage: number;
 
   @Column({ type: 'date', nullable: true })

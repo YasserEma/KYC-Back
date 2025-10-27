@@ -1,21 +1,24 @@
 import { Entity, Column, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
-import { IndividualEntity } from '../../entities/entities/individual-entity.entity';
+import { OrganizationEntity } from '../../entities/entities/organization-entity.entity';
 import { SubscriberUserEntity } from '../../subscriber-users/entities/subscriber-user.entity';
 
-@Entity('individual_relationships')
-@Index(['primary_individual_id'])
-@Index(['related_individual_id'])
+@Entity('organization_relationships')
+@Index(['primary_organization_id'])
+@Index(['related_organization_id'])
 @Index(['relationship_type'])
-export class IndividualEntityRelationshipEntity extends BaseEntity {
+export class OrganizationRelationshipEntity extends BaseEntity {
   @Column({ type: 'uuid', nullable: false })
-  primary_individual_id: string;
+  primary_organization_id: string;
 
   @Column({ type: 'uuid', nullable: false })
-  related_individual_id: string;
+  related_organization_id: string;
 
   @Column({ type: 'text', nullable: false })
   relationship_type: string;
+
+  @Column({ type: 'decimal', nullable: true })
+  ownership_percentage: number;
 
   @Column({ type: 'text', nullable: true })
   relationship_description: string;
@@ -39,19 +42,19 @@ export class IndividualEntityRelationshipEntity extends BaseEntity {
   created_by: string;
 
   // Relationships
-  @ManyToOne(() => IndividualEntity, individual => individual.primary_relationships)
-  @JoinColumn({ name: 'primary_individual_id' })
-  primary_individual: IndividualEntity;
+  @ManyToOne(() => OrganizationEntity, { eager: false })
+  @JoinColumn({ name: 'primary_organization_id' })
+  primary_organization: OrganizationEntity;
 
-  @ManyToOne(() => IndividualEntity, individual => individual.related_relationships)
-  @JoinColumn({ name: 'related_individual_id' })
-  related_individual: IndividualEntity;
+  @ManyToOne(() => OrganizationEntity, { eager: false })
+  @JoinColumn({ name: 'related_organization_id' })
+  related_organization: OrganizationEntity;
 
-  @ManyToOne(() => SubscriberUserEntity)
+  @ManyToOne(() => SubscriberUserEntity, { eager: false })
   @JoinColumn({ name: 'created_by' })
   createdBy: SubscriberUserEntity;
 
-  @ManyToOne(() => SubscriberUserEntity)
+  @ManyToOne(() => SubscriberUserEntity, { eager: false })
   @JoinColumn({ name: 'verified_by' })
   verifiedBy: SubscriberUserEntity;
 }
